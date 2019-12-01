@@ -52,6 +52,14 @@
             <artifactId>features-facade</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.52</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
