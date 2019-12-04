@@ -1,7 +1,7 @@
 package com.shirc.middleware.features.featuresservice;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.shirc.middleware.features.featuresfacade.SmsService;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
 
 /**

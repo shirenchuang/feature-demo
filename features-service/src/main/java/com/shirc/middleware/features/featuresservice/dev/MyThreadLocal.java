@@ -1,6 +1,7 @@
 package com.shirc.middleware.features.featuresservice.dev;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
+
+import org.apache.dubbo.common.utils.StringUtils;
 
 /**
  * @author shirenchuang
