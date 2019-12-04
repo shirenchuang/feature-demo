@@ -1,1 +1,3 @@
 logFilter=com.shirc.middleware.features.featuresservice.filter.LogFilter
+devVersionproviderFilter=com.shirc.middleware.features.featuresservice.filter.DevVersionProviderFilter
+devVersionconsumerFilter=com.shirc.middleware.features.featuresservice.filter.DevVersionConsumerFilter

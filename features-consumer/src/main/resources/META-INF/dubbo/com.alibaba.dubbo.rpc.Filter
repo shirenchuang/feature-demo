@@ -1,0 +1,2 @@
+logFilter=com.shirc.middleware.featuresconsumer.filter.LogFilter
+devVersionFilter=com.shirc.middleware.featuresconsumer.filter.DevVersionFilter

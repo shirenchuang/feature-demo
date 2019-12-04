@@ -1,4 +1,4 @@
-package com.shirc.middleware.features.featuresservice.filter;
+package com.shirc.middleware.featuresconsumer.filter;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * @Author shirenchuang
  * @Date 2019/12/1 10:20 PM
  **/
-//@Activate(group = {Constants.PROVIDER})
+//@Activate(group = {Constants.CONSUMER})
 public class LogFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("dubbo");
 
@@ -21,8 +21,8 @@ public class LogFilter implements Filter {
         Result result = null;
         long start = System.currentTimeMillis();
         String clientIP = RpcContext.getContext().getRemoteHost();
-        String devVersion = RpcContext.getContext().getAttachment("devVersion");
-
+        //放入迭代版本信息
+        RpcContext.getContext().setAttachment("devVersion","1.0.0");
         //入参数据在开始的时候转换，否则打印不准确
         String param = JSON.toJSONString(invocation.getArguments());
 
@@ -36,13 +36,13 @@ public class LogFilter implements Filter {
             if (null != result && null != result.getException()) {
                 Throwable exception = result.getException();
                 if (exception instanceof Exception) {
-                    logger.warn("调用接口" + methodFullName + "发生异常", result.getException());
+                    logger.warn("准备调用接口" + methodFullName + "发生异常", result.getException());
                 } else {
-                    logger.error("调用接口" + methodFullName + "发生异常", result.getException());
+                    logger.error("准备调用接口" + methodFullName + "发生异常", result.getException());
                 }
             }
             String resultStr = null == result ? "" : JSON.toJSONString(result.getValue());
-            logger.info("clientIp:{},接口:{},迭代版本:{}, 入参:{}，出参:{},耗时:{}ms", clientIP, methodFullName,devVersion,
+            logger.info("clientIp:{},接口:{}, 入参:{} 耗时:{}ms", clientIP, methodFullName,
                     JSON.toJSONString(param), resultStr, System.currentTimeMillis() - start);
 
         }
