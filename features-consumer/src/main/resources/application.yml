@@ -3,3 +3,6 @@ dubbo:
     name: demo-consumer # 消息者名字
   registry:
     address: zookeeper://127.0.0.1:2181 # 注册中心地址
+    check: false
+  consumer:
+    check: false
