@@ -39,10 +39,15 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!-- 不可以执行jar  记得去掉这个打包插件 -->
+
+            <!--<plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 

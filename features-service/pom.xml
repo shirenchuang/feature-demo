@@ -41,11 +41,12 @@
             </exclusions>
         </dependency>
 
-        <dependency>
+        <!-- 外部加载jar启动, 无侵入-->
+  <!--      <dependency>
             <groupId>com.shirc.middleware.features</groupId>
             <artifactId>features-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
 
 
 
