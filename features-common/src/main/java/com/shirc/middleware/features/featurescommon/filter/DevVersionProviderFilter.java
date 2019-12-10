@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  **/
 @Activate(group = {Constants.PROVIDER})
 public class DevVersionProviderFilter implements Filter {
-    private static final Logger logger = LoggerFactory.getLogger("dubbo");
+    private static final Logger logger = LoggerFactory.getLogger("devVersion");
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {

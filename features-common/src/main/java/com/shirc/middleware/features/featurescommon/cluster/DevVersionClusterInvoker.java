@@ -20,15 +20,12 @@ import com.google.common.collect.Lists;
 import com.shirc.middleware.features.featurescommon.dev.MyThreadLocal;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
-import org.apache.dubbo.common.logger.Logger;
-import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.StringUtils;
-import org.apache.dubbo.registry.integration.RegistryDirectory;
-import org.apache.dubbo.registry.integration.RegistryProtocol;
 import org.apache.dubbo.rpc.*;
 import org.apache.dubbo.rpc.cluster.Directory;
-import org.apache.dubbo.rpc.protocol.InvokerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -41,8 +38,7 @@ import java.util.List;
  * 参照 {@link org.apache.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker}
  */
 public class DevVersionClusterInvoker<T> implements Invoker<T> {
-
-    private static final Logger logger = LoggerFactory.getLogger(DevVersionClusterInvoker.class);
+    private static final Logger logger = LoggerFactory.getLogger("devVersion");
 
     private final Directory<T> directory;
 
@@ -123,6 +119,7 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
         List<Invoker<T>> invokers = null;
         if (invocation instanceof RpcInvocation) {
             try {
+                /**其实我们也可以给directory生生一个代理类,来做帅选操作**/
                 invokers = directory.list(invocation);
                 //经过了dubbo的栓选之后,我们来找自己需要的Invokes
                 String devVersion = MyThreadLocal.getDevVersion();
@@ -153,12 +150,12 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
                 if(CollectionUtils.isEmpty(newInvokers)){
                     String serviceName = directory.getInterface().getName();
                     if(StringUtils.isEmpty(devVersion)){
-                        String error = "当前消费者是稳定版本~ ,但是没有找到将要消费的服务=>"+serviceName+" 的稳定版本！！";
+                        String error = "=====当前消费者自身版本和迭代传递版本均为稳定版本~ ,但是没有找到将要消费的服务=>"+serviceName+" 的稳定版本！！";
                         logger.error(error);
                         throw new RuntimeException(error);
                     }else {
                         StringBuffer sb = new StringBuffer();
-                        sb.append("=======当前自身版本为:").append(MyThreadLocal.localVersion).append(";传递版本为:")
+                        sb.append("=======当前消费者自身版本为:").append(MyThreadLocal.localVersion).append(";传递版本为:")
                                 .append(MyThreadLocal.getFromVersion()).append("; 将要消费的服务:").append(serviceName)
                                 .append("没有找到与之对应的迭代版本;将会调用稳定版本");
                         logger.info(sb.toString());
@@ -193,10 +190,10 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
 
     public static void main(String[] args) {
 
-        String applcation = "maybach-go"+MyThreadLocal.spiltString+"1.0.1";
-        boolean b = applcation.indexOf(MyThreadLocal.spiltString)==-1;
-        applcation = applcation.substring(applcation.indexOf(MyThreadLocal.spiltString)+5);
-
+        String application = "application"+MyThreadLocal.spiltString+"1.0.1";
+        boolean b = application.indexOf(MyThreadLocal.spiltString)==-1;
+        application = application.substring(application.indexOf(MyThreadLocal.spiltString)+5);
+        System.out.print(application);
 
     }
 }
