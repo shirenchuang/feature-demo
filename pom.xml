@@ -18,6 +18,7 @@
 
     <modules>
         <module>features-facade</module>
+        <module>features-common</module>
         <module>features-service</module>
         <module>features-services2</module>
         <module>features-consumer</module>

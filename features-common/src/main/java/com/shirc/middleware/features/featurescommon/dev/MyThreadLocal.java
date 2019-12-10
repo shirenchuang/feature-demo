@@ -14,6 +14,9 @@ public class MyThreadLocal {
 
     public static ThreadLocal<String> devVersion = new ThreadLocal();
 
+    /**用户Application评价的固定字符;**/
+    public static String spiltString = "_dev_";
+
     public static String localVersion  ;
 
     static {
