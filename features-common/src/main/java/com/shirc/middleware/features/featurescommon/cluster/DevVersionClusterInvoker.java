@@ -128,24 +128,21 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
                     //获取应用名称
                     String applcation  = ((InvokerDelegate) invoker).getProviderUrl().getParameter(Constants.APPLICATION_KEY);
 
-                    if(applcation.indexOf(MyThreadLocal.spiltString)==-1){
-                        //不是迭代
-                    }else {
-
-                    }
-
-
-                    applcation = applcation.substring(applcation.indexOf(MyThreadLocal.spiltString));
-
-
                     if(StringUtils.isEmpty(devVersion)){
-                        //只能访问master版本
-
-                        return invokers;
+                        if(applcation.indexOf(MyThreadLocal.spiltString)==-1){
+                            //不是迭代过来或者本身不是迭代的请求    只能访问非迭代版本
+                            newInvokers.add(invoker);
+                        }
                     }else {
-
+                        //是迭代的请求  就需要找对应的迭代服务
+                        if(applcation.indexOf(MyThreadLocal.spiltString)!=-1){
+                            applcation = applcation.substring(applcation.indexOf(MyThreadLocal.spiltString)+5);
+                            if(applcation.equals(devVersion)){
+                                newInvokers.add(invoker);
+                            }
+                        }
                     }
-
+                    return invokers;
                 }
             } catch (RpcException e) {
 
@@ -175,5 +172,15 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
     @Override
     public String toString() {
         return "invoker :" + this.invoker + ",directory: " + this.directory;
+    }
+
+
+    public static void main(String[] args) {
+
+        String applcation = "maybach-go"+MyThreadLocal.spiltString+"1.0.1";
+        boolean b = applcation.indexOf(MyThreadLocal.spiltString)==-1;
+        applcation = applcation.substring(applcation.indexOf(MyThreadLocal.spiltString)+5);
+
+
     }
 }
