@@ -1,6 +1,7 @@
 package com.shirc.middleware.features.featurescommon.filter;
 
 import com.shirc.middleware.features.featurescommon.dev.MyThreadLocal;
+import com.shirc.middleware.features.featurescommon.dev.TraceUtil;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.*;
@@ -20,15 +21,14 @@ public class DevVersionConsumerFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
 
+        String traceId = TraceUtil.getTraceId();
+        RpcContext.getContext().setAttachment("myTraceId",traceId);
 
         String toDevVersion = MyThreadLocal.getDevVersion();
-        try {
-            RpcContext.getContext().setAttachment("devVersion",toDevVersion);
-            doLog(invoker,invocation);
-            return invoker.invoke(invocation);
-        } finally {
+        RpcContext.getContext().setAttachment("devVersion",toDevVersion);
+        doLog(invoker,invocation);
+        return invoker.invoke(invocation);
 
-        }
     }
 
     private void doLog(Invoker<?> invoker, Invocation invocation){
@@ -36,7 +36,8 @@ public class DevVersionConsumerFilter implements Filter {
         String method = invocation.getMethodName();
         String methodFullName = interfaceName + "." + method;
         StringBuffer sb = new StringBuffer();
-        sb.append("=== ConsumerFilter:当前自身版本:").append(MyThreadLocal.localVersion)
+        sb.append("==TraceId:").append(TraceUtil.getTraceId())
+        .append("=== ConsumerFilter:当前自身版本:").append(MyThreadLocal.localVersion)
                 .append("; 接收传递版本:").append(MyThreadLocal.getFromVersion())
                 .append("; 往后传递版本:").append(MyThreadLocal.getDevVersion())
         .append(" ;调用服务=> ").append(methodFullName);

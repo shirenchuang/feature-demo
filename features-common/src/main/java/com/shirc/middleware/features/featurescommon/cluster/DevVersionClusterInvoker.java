@@ -156,7 +156,8 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
                     }else {
                         StringBuffer sb = new StringBuffer();
                         sb.append("=======当前消费者自身版本为:").append(MyThreadLocal.localVersion).append(";传递版本为:")
-                                .append(MyThreadLocal.getFromVersion()).append("; 将要消费的服务:").append(serviceName)
+                                .append(MyThreadLocal.getFromVersion())
+                                .append(";往后传递版本").append(MyThreadLocal.getDevVersion()).append("; 将要消费的服务:").append(serviceName)
                                 .append("没有找到与之对应的迭代版本;将会调用稳定版本");
                         logger.info(sb.toString());
                         return invokers;
