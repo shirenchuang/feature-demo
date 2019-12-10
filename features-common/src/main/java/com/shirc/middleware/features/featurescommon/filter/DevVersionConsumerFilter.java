@@ -24,12 +24,22 @@ public class DevVersionConsumerFilter implements Filter {
         String toDevVersion = MyThreadLocal.getDevVersion();
         try {
             RpcContext.getContext().setAttachment("devVersion",toDevVersion);
+            doLog(invoker,invocation);
             return invoker.invoke(invocation);
         } finally {
-            String interfaceName = invoker.getInterface().getCanonicalName();
-            String method = invocation.getMethodName();
-            String methodFullName = interfaceName + "." + method;
-            logger.info("Consumer 接口:{},设置的迭代版本号:{}", methodFullName,toDevVersion);
+
         }
+    }
+
+    private void doLog(Invoker<?> invoker, Invocation invocation){
+        String interfaceName = invoker.getInterface().getCanonicalName();
+        String method = invocation.getMethodName();
+        String methodFullName = interfaceName + "." + method;
+        StringBuffer sb = new StringBuffer();
+        sb.append("=== ConsumerFilter:当前自身版本:").append(MyThreadLocal.localVersion)
+                .append("; 接收传递版本:").append(MyThreadLocal.getFromVersion())
+                .append("; 往后传递版本:").append(MyThreadLocal.getDevVersion())
+        .append(" ;调用服务=> ").append(methodFullName);
+        logger.info(sb.toString());
     }
 }

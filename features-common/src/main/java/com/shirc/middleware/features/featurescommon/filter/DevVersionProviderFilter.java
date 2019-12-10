@@ -25,12 +25,26 @@ public class DevVersionProviderFilter implements Filter {
         try {
             //放入到本地线程存放
             MyThreadLocal.devVersion.set(fromDevVersion);
+            doLog(invoker,invocation);
             return invoker.invoke(invocation);
         } finally {
-            String interfaceName = invoker.getInterface().getCanonicalName();
-            String method = invocation.getMethodName();
-            String methodFullName = interfaceName + "." + method;
-            logger.info("Provider:接口:{},获取的迭代版本:{}", methodFullName,fromDevVersion);
+
         }
     }
+
+
+    private void doLog(Invoker<?> invoker, Invocation invocation){
+        String interfaceName = invoker.getInterface().getCanonicalName();
+        String method = invocation.getMethodName();
+        String methodFullName = interfaceName + "." + method;
+        StringBuffer sb = new StringBuffer();
+        sb.append("=== ProviderFilter:当前自身版本:").append(MyThreadLocal.localVersion)
+                .append("; 接收传递版本:").append(RpcContext.getContext().getAttachment("devVersion"))
+                .append("; 往后传递版本:").append(RpcContext.getContext().getAttachment("devVersion"))
+                .append(" ;将被调用服务=> ").append(methodFullName);
+        logger.info(sb.toString());
+    }
+
+
+
 }
