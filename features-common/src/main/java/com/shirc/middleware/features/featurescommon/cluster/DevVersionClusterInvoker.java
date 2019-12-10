@@ -25,10 +25,13 @@ import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.registry.integration.RegistryDirectory;
+import org.apache.dubbo.registry.integration.RegistryProtocol;
 import org.apache.dubbo.rpc.*;
 import org.apache.dubbo.rpc.cluster.Directory;
 import org.apache.dubbo.rpc.protocol.InvokerWrapper;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -125,19 +128,23 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
                 String devVersion = MyThreadLocal.getDevVersion();
                 List<Invoker<T>> newInvokers = Lists.newArrayList();
                 for (Invoker invoker : invokers){
+                    URL providerUrl ;
                     //获取应用名称
-                    String applcation  = ((InvokerDelegate) invoker).getProviderUrl().getParameter(Constants.APPLICATION_KEY);
+                    Method getProviderUrl = invoker.getClass().getDeclaredMethod("getProviderUrl");
+                    getProviderUrl.setAccessible(true);
+                    providerUrl = (URL)getProviderUrl.invoke(invoker);
+                    String application  = providerUrl.getParameter(Constants.APPLICATION_KEY);
 
                     if(StringUtils.isEmpty(devVersion)){
-                        if(applcation.indexOf(MyThreadLocal.spiltString)==-1){
+                        if(application.indexOf(MyThreadLocal.spiltString)==-1){
                             //不是迭代过来或者本身不是迭代的请求    只能访问非迭代版本
                             newInvokers.add(invoker);
                         }
                     }else {
                         //是迭代的请求  就需要找对应的迭代服务
-                        if(applcation.indexOf(MyThreadLocal.spiltString)!=-1){
-                            applcation = applcation.substring(applcation.indexOf(MyThreadLocal.spiltString)+5);
-                            if(applcation.equals(devVersion)){
+                        if(application.indexOf(MyThreadLocal.spiltString)!=-1){
+                            application = application.substring(application.indexOf(MyThreadLocal.spiltString)+5);
+                            if(application.equals(devVersion)){
                                 newInvokers.add(invoker);
                             }
                         }
@@ -148,26 +155,18 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
 
                 logger.error("获取 迭代版本 的服务时 发生错误~~:"+ directory.getUrl().getServiceInterface() + ", method:" + invocation.getMethodName()
                         , e);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
         return invokers;
     }
 
-    /**
-     *     手动把这个复制来 强制转换
-     */
-    private static class InvokerDelegate<T> extends InvokerWrapper<T> {
-        private URL providerUrl;
 
-        public InvokerDelegate(Invoker<T> invoker, URL url, URL providerUrl) {
-            super(invoker, url);
-            this.providerUrl = providerUrl;
-        }
-
-        public URL getProviderUrl() {
-            return providerUrl;
-        }
-    }
 
     @Override
     public String toString() {
