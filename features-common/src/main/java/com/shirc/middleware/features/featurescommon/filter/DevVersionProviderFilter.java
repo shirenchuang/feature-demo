@@ -21,23 +21,24 @@ public class DevVersionProviderFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
 
-        String myTraceId = RpcContext.getContext().getAttachment("myTraceId");
-        TraceUtil.traceLocal.set(myTraceId);
+        String fromTraceId = RpcContext.getContext().getAttachment("myTraceId");
+        TraceUtil.traceLocal.set(fromTraceId);
+        String myTraceId = TraceUtil.getTraceId();
 
         String fromDevVersion = RpcContext.getContext().getAttachment("devVersion");
         //放入到本地线程存放
         MyThreadLocal.devVersion.set(fromDevVersion);
-        doLog(invoker,invocation);
+        doLog(invoker,invocation,myTraceId);
         return invoker.invoke(invocation);
     }
 
 
-    private void doLog(Invoker<?> invoker, Invocation invocation){
+    private void doLog(Invoker<?> invoker, Invocation invocation,String traceId){
         String interfaceName = invoker.getInterface().getCanonicalName();
         String method = invocation.getMethodName();
         String methodFullName = interfaceName + "." + method;
         StringBuffer sb = new StringBuffer();
-        sb.append("==TraceId:").append(TraceUtil.getTraceId())
+        sb.append("==TraceId:").append(traceId)
         .append(" ProviderFilter:当前自身版本:").append(MyThreadLocal.localVersion)
                 .append("; 接收传递版本:").append(RpcContext.getContext().getAttachment("devVersion"))
                 .append("; 往后传递版本:").append(RpcContext.getContext().getAttachment("devVersion"))

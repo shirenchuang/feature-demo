@@ -26,17 +26,17 @@ public class DevVersionConsumerFilter implements Filter {
 
         String toDevVersion = MyThreadLocal.getDevVersion();
         RpcContext.getContext().setAttachment("devVersion",toDevVersion);
-        doLog(invoker,invocation);
+        doLog(invoker,invocation,traceId);
         return invoker.invoke(invocation);
 
     }
 
-    private void doLog(Invoker<?> invoker, Invocation invocation){
+    private void doLog(Invoker<?> invoker, Invocation invocation,String traceId){
         String interfaceName = invoker.getInterface().getCanonicalName();
         String method = invocation.getMethodName();
         String methodFullName = interfaceName + "." + method;
         StringBuffer sb = new StringBuffer();
-        sb.append("==TraceId:").append(TraceUtil.getTraceId())
+        sb.append("==TraceId:").append(traceId)
         .append("=== ConsumerFilter:当前自身版本:").append(MyThreadLocal.localVersion)
                 .append("; 接收传递版本:").append(MyThreadLocal.getFromVersion())
                 .append("; 往后传递版本:").append(MyThreadLocal.getDevVersion())

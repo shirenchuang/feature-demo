@@ -4,5 +4,6 @@ dubbo:
   registry:
     address: zookeeper://127.0.0.1:2181 # 注册中心地址
     check: false
+    dynamic: true
   consumer:
     check: false

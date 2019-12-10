@@ -28,7 +28,7 @@ public class TraceUtil {
             return UUID.randomUUID().toString().replace("-","")+"_1";
         }else {
             String[] s = traceId.split("_");
-            return s[0]+(Integer.parseInt(s[1])+1);
+            return s[0]+"_"+(Integer.parseInt(s[1])+1);
         }
     }
 
