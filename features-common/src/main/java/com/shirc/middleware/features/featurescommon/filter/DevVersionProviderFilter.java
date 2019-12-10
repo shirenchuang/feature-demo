@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @Description 服务提供者在调用之前获取 迭代版本号
+ * @Description 当前服务提供者在被真正调用之前获取 消费者过来的迭代版本号
  *              然后保存在本地线程变量中,在调用其他dubbo服务的时候 要带上版本号
  * @Author shirenchuang
  * @Date 2019/12/1 10:20 PM
