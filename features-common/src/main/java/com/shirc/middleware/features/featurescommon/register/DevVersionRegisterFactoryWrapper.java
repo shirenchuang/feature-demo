@@ -37,7 +37,7 @@ public class DevVersionRegisterFactoryWrapper implements RegistryFactory {
     public static URL changeApplication(URL url){
         if(!StringUtils.isEmpty(MyThreadLocal.localVersion)){
             URL url2 = url.addParameter(Constants.APPLICATION_KEY,
-                    url.getParameter(Constants.APPLICATION_KEY)+"_"+MyThreadLocal.localVersion);
+                    url.getParameter(Constants.APPLICATION_KEY)+MyThreadLocal.spiltString+MyThreadLocal.localVersion);
             return url2;
         }
         return url;

@@ -23,13 +23,18 @@ public class MyThreadLocal {
         localVersion = System.getProperty("localVersion");
     }
 
+
+    public static String getFromVersion(){
+        return devVersion.get();
+    }
+
     /**
      * 如果本地变量没有  则可能是第一个发起方;
      * 则去当前服务的版本号,然后一直传递下去;
      * @return
      */
     public static String getDevVersion(){
-        String fromVersion = devVersion.get();
+        String fromVersion = getFromVersion();
         if(!StringUtils.isEmpty(fromVersion)){
             return fromVersion;
         }

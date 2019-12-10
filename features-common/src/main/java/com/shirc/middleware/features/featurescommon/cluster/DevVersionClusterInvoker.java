@@ -149,8 +149,25 @@ public class DevVersionClusterInvoker<T> implements Invoker<T> {
                             }
                         }
                     }
-                    return invokers;
                 }
+                if(CollectionUtils.isEmpty(newInvokers)){
+                    String serviceName = directory.getInterface().getName();
+                    if(StringUtils.isEmpty(devVersion)){
+                        String error = "当前消费者是稳定版本~ ,但是没有找到将要消费的服务=>"+serviceName+" 的稳定版本！！";
+                        logger.error(error);
+                        throw new RuntimeException(error);
+                    }else {
+                        StringBuffer sb = new StringBuffer();
+                        sb.append("=======当前自身版本为:").append(MyThreadLocal.localVersion).append(";传递版本为:")
+                                .append(MyThreadLocal.getFromVersion()).append("; 将要消费的服务:").append(serviceName)
+                                .append("没有找到与之对应的迭代版本;将会调用稳定版本");
+                        logger.info(sb.toString());
+                        return invokers;
+                    }
+                }else {
+                    return newInvokers;
+                }
+
             } catch (RpcException e) {
 
                 logger.error("获取 迭代版本 的服务时 发生错误~~:"+ directory.getUrl().getServiceInterface() + ", method:" + invocation.getMethodName()
