@@ -1,5 +1,9 @@
 package com.shirc.middleware.features.featuresservice;
 
+import com.daimler.cap.annotation.API;
+import com.daimler.cap.annotation.Application;
+import com.daimler.cap.annotation.Param;
+import com.daimler.cap.annotation.ParamInfo;
 import com.shirc.middleware.features.featuresfacade.AService;
 import com.shirc.middleware.features.featuresfacade.BService;
 import com.shirc.middleware.features.featuresfacade.CService;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Component;
  * @Author shirenchuang
  * @Date 2019/11/30 2:19 PM
  **/
+@Application("features-demo")
 @Service
 @Component
 public class AServiceImpl implements AService {
@@ -28,5 +33,12 @@ public class AServiceImpl implements AService {
     @Override
     public String A_callB_C(){
         return "===  call A ===》"+bService.B_call_C();
+    }
+
+
+    @API
+    @Override
+    public String featureDemo(@Param(reqName = "n") String name){
+        return name;
     }
 }

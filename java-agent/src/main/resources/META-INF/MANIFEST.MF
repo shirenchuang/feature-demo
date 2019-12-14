@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Premain-Class: com.shirc.middleware.features.javaagent.AgentMain
+Agent-Class: com.shirc.middleware.features.javaagent.AgentMain
+Can-Redefine-Classes: true

@@ -15,4 +15,6 @@ public interface AService {
      * @return
      */
     String A_callB_C();
+
+    String featureDemo(String name);
 }
