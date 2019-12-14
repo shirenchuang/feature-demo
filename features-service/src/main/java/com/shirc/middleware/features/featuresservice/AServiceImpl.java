@@ -38,7 +38,7 @@ public class AServiceImpl implements AService {
 
     @API
     @Override
-    public String featureDemo(@Param(reqName = "n") String name){
-        return name;
+    public String featureDemo(){
+        return "。。。。。";
     }
 }

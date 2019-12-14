@@ -72,7 +72,7 @@ public class AgentMain {
 				ctMethod.insertBefore("System.out.println(\"javaassist 改字节码啦！！！！！\");");
 				ctMethod.insertBefore("String localVersion = System.getProperty(\"localVersion\");\n" +
 						"    System.out.println(\"=======本地变量:\"+localVersion);\n" +
-						"    apiInfo.setAppName(apiInfo.getApiName()+\"_dev_\"+localVersion);");
+						"    apiInfo.setAppName(apiInfo.getAppName()+\"_dev_\"+localVersion);");
 				return ctclass.toBytecode();
 			} catch (NotFoundException | CannotCompileException | IOException e) {
 				e.printStackTrace();

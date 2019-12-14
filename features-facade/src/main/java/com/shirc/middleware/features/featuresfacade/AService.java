@@ -16,5 +16,5 @@ public interface AService {
      */
     String A_callB_C();
 
-    String featureDemo(String name);
+    String featureDemo();
 }
