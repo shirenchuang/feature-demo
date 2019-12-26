@@ -3,6 +3,8 @@ package com.shirc.middleware.features.featurescommon.register;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.registry.NotifyListener;
 import org.apache.dubbo.registry.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -14,6 +16,9 @@ import java.util.List;
  */
 
 public class DevVersionRegisterWrapper implements Registry {
+
+    private static final Logger logger = LoggerFactory.getLogger("devVersion");
+
 
     private Registry registry;
 

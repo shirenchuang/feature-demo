@@ -2,6 +2,8 @@ package com.shirc.middleware.features.featurescommon.dev;
 
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
@@ -11,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 
 public class MyThreadLocal {
+    private static final Logger logger = LoggerFactory.getLogger("devVersion");
 
 
     public static ThreadLocal<String> devVersion = new TransmittableThreadLocal();
@@ -22,6 +25,7 @@ public class MyThreadLocal {
 
     static {
         localVersion = System.getProperty("localVersion");
+        logger.info("====devVersion:{}   ========",devVersion);
     }
 
 

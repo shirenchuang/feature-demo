@@ -9,13 +9,16 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author shirenchuang
  * @date 2019/12/14  12:49 下午
  */
 
 public class AgentMain {
+
+	private static final Logger logger = LoggerFactory.getLogger(AgentMain.class);
 
 	private static final String injectedClassName = "com.daimler.cap.discovery.Discovery";
 	private static final String methodName = "writeToZK";
@@ -47,26 +50,27 @@ public class AgentMain {
 	private static byte[] transformClass(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
 		className = className.replace("/",".");
 
-		if(className.contains("com.daimler.cap.discovery")){
-			System.out.println("!!!!!加载类:"+className);
-		}
-
 		if(className.equals(injectedClassName)){
-			System.out.println("==========进来啦！！！！:"+className);
+			logger.info("=======加载类{}======",injectedClassName);
 
 			if(localVersion == null||localVersion.length()==0){
-				System.out.println("当前不是迭代版本~~ 不增强~~！");
-
+				logger.warn("==== 当前不是迭代版本~~ 不增强~~！=====");
 				return null;
 			}
-			System.out.println("当前是迭代版本~~ 对 Discovery 做修改！");
+			logger.warn("====当前是迭代版本~~ 对 Discovery 做修改！====");
 
 			//javassist
 			CtClass ctclass = null;
 
 			try {
 				//获得指定类字节码
-				ctclass = ClassPool.getDefault().get(className);
+				ClassPool classPool = ClassPool.getDefault();
+				classPool.appendClassPath(new LoaderClassPath(Thread.currentThread()
+				.getContextClassLoader()));
+
+				ctclass = classPool.get(className);
+
+
 				//获取方法实例
 				CtMethod ctMethod = ctclass.getDeclaredMethod(methodName);
 				ctMethod.insertBefore("System.out.println(\"javaassist 改字节码啦！！！！！\");");
