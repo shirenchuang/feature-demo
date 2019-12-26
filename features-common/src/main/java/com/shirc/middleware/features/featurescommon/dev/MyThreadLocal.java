@@ -1,6 +1,7 @@
 package com.shirc.middleware.features.featurescommon.dev;
 
 
+import com.alibaba.ttl.TransmittableThreadLocal;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.util.StringUtils;
 public class MyThreadLocal {
 
 
-    public static ThreadLocal<String> devVersion = new ThreadLocal();
+    public static ThreadLocal<String> devVersion = new TransmittableThreadLocal();
 
     /**用户Application评价的固定字符;**/
     public static String spiltString = "_dev_";
