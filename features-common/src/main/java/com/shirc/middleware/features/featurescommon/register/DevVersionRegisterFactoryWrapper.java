@@ -34,9 +34,11 @@ public class DevVersionRegisterFactoryWrapper implements RegistryFactory {
         //获取当前环境的迭代版本号
         if(!StringUtils.isEmpty(MyThreadLocal.localVersion)){
             logger.info("=====启动的服务是迭代版本服务  devVersion:{}=====",MyThreadLocal.localVersion);
+            System.out.println("====启动的服务是迭代版本服务  devVersion:"+MyThreadLocal.localVersion);
             return new DevVersionRegisterWrapper(registryFactory.getRegistry(changeApplication(url)));
         }
         logger.info("=====启动的服务是稳定版本====");
+        System.out.println("=====启动的服务是稳定版本====");
         return registryFactory.getRegistry(url);
     }
 
