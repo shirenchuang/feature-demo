@@ -17,6 +17,7 @@ public class MyThreadLocal {
 
 
     public static ThreadLocal<String> devVersion = new TransmittableThreadLocal();
+    //public static ThreadLocal<String> devVersion = new ThreadLocal();
 
     /**用户Application评价的固定字符;**/
     public static String spiltString = "_dev_";
@@ -26,6 +27,7 @@ public class MyThreadLocal {
     static {
         localVersion = System.getProperty("localVersion");
         logger.info("====devVersion:{}   ========",devVersion);
+        System.out.println("s====devVersion:   ========"+devVersion);
     }
 
 

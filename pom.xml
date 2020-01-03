@@ -45,6 +45,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.shirc.middleware.features</groupId>
+            <artifactId>features-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
